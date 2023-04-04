@@ -8,10 +8,15 @@ Set objWorkbook = objExcel.Workbooks.Open("ファイル名.xlsx")
 For Each objWorksheet In objWorkbook.Worksheets
 
     '印刷範囲を設定する
-    objWorksheet.PageSetup.PrintArea = "$A$1:$G$50"
+    objWorksheet.PageSetup.PrintArea = "$A$1:$BA$60"
 
     '印刷方向を横に設定する
     objWorksheet.PageSetup.Orientation = 2 ' xlLandscape の代わりに 2 を設定
+
+    ' 印刷領域がA4用紙からはみ出す場合、印刷縮尺を調整する
+    If objWorksheet.PageSetup.Zoom < 100 Then
+        objWorksheet.PageSetup.Zoom = 100
+    End If
 
     '印刷範囲を1ページに設定する
     objWorksheet.PageSetup.FitToPagesWide = 1
