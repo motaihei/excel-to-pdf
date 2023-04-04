@@ -10,5 +10,8 @@ for sheetname in workbook.sheetnames:
     # 印刷範囲を設定する
     worksheet.print_area = 'A1:G50'
 
+    # 印刷方向を横に設定する
+    worksheet.page_setup.orientation = worksheet.ORIENTATION_LANDSCAPE
+
 # Excelファイルを保存する
 workbook.save('ファイル名.xlsx')
