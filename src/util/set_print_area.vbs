@@ -14,8 +14,10 @@ For Each objWorksheet In objWorkbook.Worksheets
     objWorksheet.PageSetup.Orientation = 2 ' xlLandscape の代わりに 2 を設定
 
     ' 印刷領域がA4用紙からはみ出す場合、印刷縮尺を調整する
-    If objWorksheet.PageSetup.Zoom < 100 Then
-        objWorksheet.PageSetup.Zoom = 100
+    If worksheet.PageSetup.Zoom < 100 Then
+        worksheet.PageSetup.Zoom = False
+        worksheet.PageSetup.FitToPagesWide = 1
+        worksheet.PageSetup.FitToPagesTall = False
     End If
 
     '印刷範囲を1ページに設定する
