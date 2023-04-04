@@ -1,5 +1,6 @@
 # excel-to-pdf
 ExcelファイルをPDFファイルに変換します
+※windows環境にExcelがインストールされていること
 
 ## 使い方
 1. 任意のファルダに対象となるファイル(xlsx, xls)を格納
