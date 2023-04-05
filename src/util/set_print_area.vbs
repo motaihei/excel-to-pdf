@@ -1,40 +1,57 @@
+' @echo off
+' cscript.exe //nologo "C:\test.vbs"
+
 'Excelオブジェクトを作成する
 Set objExcel = CreateObject("Excel.Application")
 
 'Excelファイルを開く
 Set objWorkbook = objExcel.Workbooks.Open("ファイル名.xlsx")
 
-'全シートに対して処理を行う
-For Each objWorksheet In objWorkbook.Worksheets
+' Excelファイルを開く
+Set objExcel = CreateObject("Excel.Application")
+Set objWorkbook = objExcel.Workbooks.Open("C:\test.xlsx")
 
-    '印刷範囲を設定する
-    objWorksheet.PageSetup.PrintArea = "$A$1:$BA$60"
+' ' シートをアクティブにする
+' Set objWorksheet = objWorkbook.Worksheets("シート名")
+' objWorksheet.Activate
 
-    '印刷方向を横に設定する
-    objWorksheet.PageSetup.Orientation = 2 ' xlLandscape の代わりに 2 を設定
+' 設定処理
+Sub SetPrintArea()
+    Dim ws As Worksheet
+    For Each ws In ActiveWorkbook.Worksheets
+        ws.Activate
+        With ActiveSheet.PageSetup
+            .PrintArea = "$A$1:$AZ$46" ' 印刷範囲を設定する
+            .Zoom = False ' 縮尺を自動にしない
+            .FitToPagesWide = 1 ' 1ページ幅に調整する
+            .FitToPagesTall = False ' 高さは自動にする
+            .Zoom = 80 ' 表示拡大率を80%にする
+            .PrintTitleRows = "" ' 印刷タイトル行はなし
+            .PrintTitleColumns = "" ' 印刷タイトル列はなし
+            .PrintGridlines = True ' グリッド線を印刷する
+            .CenterHorizontally = True ' 水平方向に中央揃えにする
+            .CenterVertically = False ' 垂直方向は揃えない
+            .Orientation = xlPortrait ' 用紙の向きを縦にする
+            .PaperSize = xlPaperA4 ' 用紙サイズをA4にする
+            .FirstPageNumber = xlAutomatic ' 自動ページ番号
+            .Order = xlDownThenOver ' ページ印刷順序
+            .BlackAndWhite = False ' 白黒印刷しない
+            .Draft = False ' 下書き品質で印刷しない
+            .PrintComments = xlPrintNoComments ' コメントは印刷しない
+            .PrintErrors = xlPrintErrorsDisplayed ' エラーは印刷しない
+            .PrintQuality = 600 ' 印刷品質を600にする
+            .RightFooter = "Page &P of &N" ' 右下にページ番号を表示する
+            .LeftHeader = "" ' 左上に何も表示しない
+            .RightHeader = "" ' 右上に何も表示しない
+            .CenterHeader = "" ' 上部中央に何も表示しない
+            .CenterFooter = "" ' 下部中央に何も表示しない
+        End With
+        Range("A1").Select ' 処理シートのセルの選択を"A,1"にする
+        ActiveWindow.Zoom = 80 ' 表示拡大率を80%にする
+        ActiveWindow.View = xlPageBreakPreview ' 表示モードを「改ページモード」にする
+    Next ws
+End Sub
 
-    ' 印刷領域がA4用紙からはみ出す場合、印刷縮尺を調整する
-    If worksheet.PageSetup.Zoom < 100 Then
-        worksheet.PageSetup.Zoom = False
-        worksheet.PageSetup.FitToPagesWide = 1
-        worksheet.PageSetup.FitToPagesTall = False
-    End If
-
-    '印刷範囲を1ページに設定する
-    objWorksheet.PageSetup.FitToPagesWide = 1
-    objWorksheet.PageSetup.FitToPagesTall = 1
-
-    'カーソルをA1に移動する
-    objWorksheet.Range("A1").Select
-
-Next
-
-'拡大率を80%に設定する
-objExcel.ActiveWindow.Zoom = 80
-
-'改ページモードで表示する
-objExcel.ActiveWindow.View = 3
-
-'Excelファイルを保存して閉じる
-objWorkbook.Save
-objWorkbook.Close
+' Excelファイルを保存して閉じる
+objWorkbook.Close True
+objExcel.Quit
